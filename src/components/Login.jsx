@@ -27,7 +27,6 @@ const Login = () => {
             setError(res.error)
         } else {
             const currentUser = jwtDecode(res.token)
-            console.log(currentUser, "<-- currentUser")
             setUser(currentUser)
             setError(null)
             // expiry date is expressed in days. 1/24 == 1 hour expiry time

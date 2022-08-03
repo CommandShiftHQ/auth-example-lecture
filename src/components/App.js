@@ -1,5 +1,5 @@
 import "../styles/app.css";
-import { Routes, Route, BrowserRouter } from "react-router-dom"
+import { Routes, Route, BrowserRouter, Navigate } from "react-router-dom"
 import { useEffect, useState } from "react";
 import jwtDecode from "jwt-decode";
 import Home from "./Home";
@@ -26,7 +26,9 @@ function App() {
                 <BrowserRouter>
                     <Routes>
                         <Route exact path="/" element={<Home />} />
-                        <Route path="/account" element={<Account />} />
+                        <Route path="/account" element={
+                            user ? <Account /> : <Navigate to="/login" replace />
+                        } />
                         <Route path="/login" element={<Login />} />
                     </Routes>
                 </BrowserRouter>
