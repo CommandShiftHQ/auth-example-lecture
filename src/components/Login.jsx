@@ -1,6 +1,8 @@
 import { useContext, useState } from "react"
+import { useNavigate } from "react-router-dom"
 import fakeLogin from "../utils/fakeLogin"
 import Header from "./Header"
+import jwtDecode from "jwt-decode"
 
 import AuthContext from "../utils/AuthContext"
 
@@ -8,6 +10,7 @@ const Login = () => {
     const [details, setDetails] = useState({ username: "", email: "", password: "" })
     const [error, setError] = useState(null)
     const { setUser } = useContext(AuthContext)
+    const navigate = useNavigate()
 
     const handleChange = ({ target: { value, id } }) => {
         setDetails(prev => ({ ...prev, [id]: value }))
@@ -22,10 +25,11 @@ const Login = () => {
         if (res.error) {
             setError(res.error)
         } else {
-            console.log("credentials are correct", "<-- login")
-            console.log(res.token, "<-- res.token")
-            setUser(res.token)
+            const currentUser = jwtDecode(res.token)
+            console.log(currentUser, "<-- currentUser")
+            setUser(currentUser)
             setError(null)
+            navigate('/account')
         }
     }
 

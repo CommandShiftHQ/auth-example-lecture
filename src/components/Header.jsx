@@ -1,12 +1,14 @@
 import "../styles/header.css"
-import { Link } from "react-router-dom"
-import { useNavigate } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
+
+import { useContext } from "react"
+import AuthContext from "../utils/AuthContext"
 
 const Header = () => {
+    const { user } = useContext(AuthContext);
     const navigate = useNavigate()
     const handleClick = () => {
-        // TODO navigate to /login if not logged in, /account otherwise
-        if (false) {
+        if (user) {
             navigate("/account")
         } else {
             navigate("/login")
@@ -14,7 +16,7 @@ const Header = () => {
     }
     return (
         <nav className="header">
-            {/* TODO: display username here when logged in */}
+            {user?.username}
             <Link to="/">Home</Link>
             <div className="header__nav-link" onClick={handleClick}>Account</div>
             <Link to="/login">Login</Link>
