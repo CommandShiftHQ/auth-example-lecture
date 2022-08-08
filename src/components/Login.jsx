@@ -4,12 +4,14 @@ import { attemptLogin, fetchHash } from "../utils/fakeLogin"
 import Header from "./Header"
 import jwtDecode from "jwt-decode"
 import Cookie from "js-cookie"
+import bcrypt from "bcryptjs"
 import hashPassword from "../utils/hashPassword"
 
 import AuthContext from "../utils/AuthContext"
 
 const Login = () => {
     const [details, setDetails] = useState({ username: "", email: "", password: "" })
+    const [hashedPassword, setHashedPassword] = useState("")
     const [generatedPassword, setGeneratedPassword] = useState("")
     const [error, setError] = useState(null)
     const { setUser } = useContext(AuthContext)
@@ -30,7 +32,12 @@ const Login = () => {
         if (fetchHashResult.error) {
             setError(fetchHashResult.error)
         }  else {
-            console.log(fetchHashResult.hash)
+            const correctHash = bcrypt.compareSync(details.password, fetchHashResult.hash)
+            if (correctHash) {
+                setHashedPassword(fetchHashResult.hash)
+            } else {
+                setError("Invalid credentials")
+            }
         }
 
         const res = attemptLogin(details)
