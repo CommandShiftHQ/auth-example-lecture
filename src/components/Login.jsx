@@ -10,12 +10,18 @@ import AuthContext from "../utils/AuthContext"
 
 const Login = () => {
     const [details, setDetails] = useState({ username: "", email: "", password: "" })
+    const [generatedPassword, setGeneratedPassword] = useState("")
     const [error, setError] = useState(null)
     const { setUser } = useContext(AuthContext)
     const navigate = useNavigate()
 
     const handleChange = ({ target: { value, id } }) => {
         setDetails(prev => ({ ...prev, [id]: value }))
+    }
+
+    const handlePasswordGenChange = (e) => {
+        const pass = hashPassword(e.target.value)
+        setGeneratedPassword(pass)
     }
 
     const handleSubmit = (e) => {
@@ -51,6 +57,11 @@ const Login = () => {
                     <button type="submit">Login</button>
                     {error && <p className="error">{error}</p>}
                 </form>
+            </div>
+            <div className="container">
+                <label htmlFor="hashPassword">Password Hash Generator</label><br />
+                <input id="hashPassword" type="text" onChange={handlePasswordGenChange} /><br />
+                <div>Hashed Password: {generatedPassword}</div>
             </div>
         </div>
     )
