@@ -34,6 +34,16 @@ export const attemptLogin = (details) => {
     }
 }
 
-export const fetchHash = () => {
-
+export const fetchHash = (username, email) => {
+    const foundUser = validUser.find((user) => {
+        return (
+            user.username === username &&
+            user.email === email
+        )
+    })
+    if (foundUser) {
+        return { hash: foundUser.password }
+    } else {
+        return { error: "Credentails are invalid" }
+    }
 }
