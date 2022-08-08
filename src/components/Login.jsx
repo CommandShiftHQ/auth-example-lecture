@@ -1,4 +1,4 @@
-import { useContext, useState } from "react"
+import { useContext, useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
 import { attemptLogin, fetchHash } from "../utils/fakeLogin"
 import Header from "./Header"
@@ -17,6 +17,10 @@ const Login = () => {
     const { setUser } = useContext(AuthContext)
     const navigate = useNavigate()
 
+    useEffect(() => {
+        if (hashedPassword) submitAuth()
+    })
+
     const handleChange = ({ target: { value, id } }) => {
         setDetails(prev => ({ ...prev, [id]: value }))
     }
@@ -24,6 +28,25 @@ const Login = () => {
     const handlePasswordGenChange = (e) => {
         const pass = hashPassword(e.target.value)
         setGeneratedPassword(pass)
+    }
+
+    async function submitAuth() {
+        const credentials = {
+            username: details.username,
+            email: details.email,
+            password: hashedPassword
+        }
+        const res = attemptLogin(credentials)
+        if (res.error) {
+            setError(res.error)
+        } else {
+            const currentUser = jwtDecode(res.token)
+            setUser(currentUser)
+            setError(null)
+            // expiry date is expressed in days. 1/24 == 1 hour expiry time
+            Cookie.set("token", res.token, {expires: 1/24})
+            navigate('/account')
+        }
     }
 
     const handleSubmit = (e) => {
@@ -38,18 +61,6 @@ const Login = () => {
             } else {
                 setError("Invalid credentials")
             }
-        }
-
-        const res = attemptLogin(details)
-        if (res.error) {
-            setError(res.error)
-        } else {
-            const currentUser = jwtDecode(res.token)
-            setUser(currentUser)
-            setError(null)
-            // expiry date is expressed in days. 1/24 == 1 hour expiry time
-            Cookie.set("token", res.token, {expires: 1/24})
-            navigate('/account')
         }
     }
 

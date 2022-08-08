@@ -44,6 +44,6 @@ export const fetchHash = (username, email) => {
     if (foundUser) {
         return { hash: foundUser.password }
     } else {
-        return { error: "Credentails are invalid" }
+        return { error: "Credentials are invalid" }
     }
 }
