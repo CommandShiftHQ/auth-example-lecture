@@ -4,6 +4,7 @@ import fakeLogin from "../utils/fakeLogin"
 import Header from "./Header"
 import jwtDecode from "jwt-decode"
 import Cookie from "js-cookie"
+import hashPassword from "../utils/hashPassword"
 
 import AuthContext from "../utils/AuthContext"
 
