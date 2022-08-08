@@ -1,19 +1,20 @@
 import jwt from "jsonwebtoken"
 
-const fakeLogin = (details) => {
-    const validUser = [
-        {
-            username: "Ben",
-            email: "ben.s@builtbypixel.com",
-            password: "supermelon"
-        },
-        {
-            username: "testUser",
-            email: "test@email.com",
-            password: "testing"
-        }
-    ]
-    const isUser = validUser.some((user) => {
+const validUser = [
+    {
+        username: "Ben",
+        email: "ben.s@builtbypixel.com",
+        password: "supermelon"
+    },
+    {
+        username: "testUser",
+        email: "test@email.com",
+        password: "$2a$10$DgcGIvOKIWoMzhKPznDGs.jMW5hUDqJKTleN7coAXrv3cZmpql7sa"
+    }
+]
+
+export const attemptLogin = (details) => {
+    const isUser = validUser.find((user) => {
         return (
             user.username === details.username &&
             user.email === details.email &&
@@ -33,4 +34,6 @@ const fakeLogin = (details) => {
     }
 }
 
-export default fakeLogin
+export const fetchHash = () => {
+
+}
